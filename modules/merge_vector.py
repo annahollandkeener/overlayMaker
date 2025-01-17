@@ -1,5 +1,9 @@
-from overlayMaker.main import *
+from imports import *
 
+def printer():
+    print("Call test")
+
+'''
 activeLayers = iface.layerTreeView().selectedLayers()
 
 layersListHolder = [activeLayers]
@@ -21,3 +25,4 @@ outputPath = 'C:/wfh/per1/overlays/wet/domed/Vectors/Inner+Outer/' + layerNames 
 processing.run("native:mergevectorlayers", {'LAYERS':layersPaths,'CRS':None,'OUTPUT':outputPath})
 
 iface.addVectorLayer(outputPath, layerNames, "ogr")
+'''
