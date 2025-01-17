@@ -5,8 +5,11 @@ manual = True
 #Set desired functions to "True" 
 functions = {
 
-"flatOverlays" : True, 
-"domedOverlays" : True,
+#generates overlays for a set of blocks by subtracting their flat water levels from the project area DEM
+"flatOverlays" : False, 
+#generates overlays for a set of blocks by subtracting their domed water levels from the project area DEM
+"domedOverlays" : False,
+#generates a range of overlays and histograms within a specified range for a given block 
 "histogram" : True
 
 }
@@ -14,7 +17,7 @@ functions = {
 #paths to vector files of blocks you want to make domes for
 domedBlocks = ['']
 
-#dem for project area
+#path to dem for project area
 dem = "C:/wfh/per1/elevation/CarolinaRanch_2020lidar_3ft (2).tif"
 
 #vector file including all blocks in project area 
@@ -33,13 +36,13 @@ outputFolderDO = "C:/wfh/per1/overlays/wet/domed/dome_rasters/"
 #QGIS style file 
 stylePath = "C:/wfh/per1/overlays/styling/overlays_-.5to2.qml"
 
-#--------PREP---------
+#--------PREP-------------------------------------------------------------------------
 
 #if not manually inputting data, user input from main.py will be used (within the overlayMaker repo)
-if manual != "YES":
+if manual != True:
     from imports import *
 
-#---FUNCTIONS----------------
+#-------FUNCTIONS--------------------------------------------------------------------------
 
 #******Raster Subtractor*****
 #Takes in path of elevation dem, path of dem representing water surface and a path of output folder
@@ -180,8 +183,10 @@ def domedOverlays(dem = dem, domedBlocks = blocks, outputFolder = outputFolderDO
     
   
 #histogram function takes in a single block 
-'''def histogram(dem = dem, blocks = blocks, overlayRange = overlayRange):
-    #clipping dem to block 
+def histogram(dem = dem, blocks = blocks, overlayRange = overlayRange):
+   print("HEYYYYYYYYYYY")
+   
+   '''' #clipping dem to block 
     blockDEM = processing.run("gdal:cliprasterbymasklayer", {'INPUT':'C:/Users/KBE/Desktop/pyproj/overlays/overlay(1).tif','MASK':'C:/Users/KBE/Desktop/pyproj/overlays/block.shp','SOURCE_CRS':None,'TARGET_CRS':None,'TARGET_EXTENT':None,'NODATA':None,'ALPHA_BAND':False,'CROP_TO_CUTLINE':True,'KEEP_RESOLUTION':False,'SET_RESOLUTION':False,'X_RESOLUTION':None,'Y_RESOLUTION':None,'MULTITHREADING':False,'OPTIONS':None,'DATA_TYPE':0,'EXTRA':'','OUTPUT':'TEMPORARY_OUTPUT'})
     #getting raster stats of basic elevation for the block
     zonalStats = processing.run("native:zonalstatisticsfb", {'INPUT':'C:/Users/KBE/Desktop/pyproj/overlays/block.shp','INPUT_RASTER':'C:/Users/KBE/Desktop/pyproj/overlays/flat_raster(1).tif','RASTER_BAND':1,'COLUMN_PREFIX':'_','STATISTICS':[0,1,2],'OUTPUT':'TEMPORARY_OUTPUT'})
@@ -197,9 +202,10 @@ def domedOverlays(dem = dem, domedBlocks = blocks, outputFolder = outputFolderDO
 #-------------EXECUTIONS------------
 
 #if manual mode is active, the file will execute every function set to "True" in the inputs
-if manual == "YES":
+if manual == True:
     for f in functions.keys():
         if functions[f] == True:
             f()
 
 
+ 
