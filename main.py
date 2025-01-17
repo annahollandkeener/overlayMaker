@@ -12,5 +12,5 @@ while True:
 
     print("\nEnter 'Y' or 'N'.\n")
 
-merge_vector.printer()
+rangeStats.printer()
     

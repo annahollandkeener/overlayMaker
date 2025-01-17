@@ -1,12 +1,23 @@
+#------------MANUAL INPUTS---------
+#CHANGE manual to "YES" if entering data manually
+manual = "YES"
 
-from imports import *
+dem = ''
+block = ''
+overlayRange = []
 
 #the "block" parameter must be a vector layer of a block within the project area with a "wl" column filled with 
 #its respective water level
 #the "overlayRange" parameter must be a list containing the overlays wished to be created below or above the current water level for the block 
 #the "dem" parameter is the elevation for the project area
+#----------------------------------
 
-def stats(dem, blocks, overlayRange):
+#if not manually inputting data, user input from main.py will be used (within the overlayMaker repo)
+if manual != "YES":
+    from imports import *
+    
+#histogram function takes in a single block 
+def histogram(dem, blocks, overlayRange):
     #clipping dem to block 
     blockDEM = processing.run("gdal:cliprasterbymasklayer", {'INPUT':'C:/Users/KBE/Desktop/pyproj/overlays/overlay(1).tif','MASK':'C:/Users/KBE/Desktop/pyproj/overlays/block.shp','SOURCE_CRS':None,'TARGET_CRS':None,'TARGET_EXTENT':None,'NODATA':None,'ALPHA_BAND':False,'CROP_TO_CUTLINE':True,'KEEP_RESOLUTION':False,'SET_RESOLUTION':False,'X_RESOLUTION':None,'Y_RESOLUTION':None,'MULTITHREADING':False,'OPTIONS':None,'DATA_TYPE':0,'EXTRA':'','OUTPUT':'TEMPORARY_OUTPUT'})
     #getting raster stats of basic elevation for the block
@@ -18,5 +29,7 @@ def stats(dem, blocks, overlayRange):
         n = 1
         #adding field to attribute table
         processing.run("native:addfieldtoattributestable", {'INPUT':'memory://MultiPolygon?crs=EPSG:2264&field=id:long(10,0)&field=wl:double(10,3)&field=_count:double(0,0)&field=_sum:double(0,0)&field=_mean:double(0,0)&uid={d255e972-07dd-48d3-ab0a-e863f64dee94}','FIELD_NAME':'wl','FIELD_TYPE':1,'FIELD_LENGTH':10,'FIELD_PRECISION':0,'FIELD_ALIAS':'','FIELD_COMMENT':'','OUTPUT':'TEMPORARY_OUTPUT'})        
-        
-        
+
+#if data was input manually and this tool is being run independently, it will execute itself 
+if manual == "YES":
+    stats(dem, blocks, overlayRange)
