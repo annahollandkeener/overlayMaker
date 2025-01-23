@@ -1,8 +1,8 @@
-#--------------INPUTS--------------
+#--------------MANUAL INPUTS--------------
 #NOTICE: Change manual to "True" if entering data manually. 
 manual = True
 
-#Set desired functions to "True" 
+#Set desired functions to "True" and undesired functions to "False"
 functions = {
 
 #generates overlays for a set of blocks by subtracting their flat water levels from the project area DEM
@@ -39,7 +39,7 @@ stylePath = "C:/wfh/per1/overlays/styling/overlays_-.5to2.qml"
 #--------PREP-------------------------------------------------------------------------
 
 #if not manually inputting data, user input from main.py will be used (within the overlayMaker repo)
-if manual != True:
+if manual != "YES":
     from imports import *
 
 #-------FUNCTIONS--------------------------------------------------------------------------
@@ -182,13 +182,12 @@ def domedOverlays(dem = dem, domedBlocks = blocks, outputFolder = outputFolderDO
     print("\nDOMED OVERLAY CREATION COMPLETED! :)")
     
   
-#histogram function takes in a single block 
+#histogram function takes in a single block and creates overlays and corresponding histograms for a specified range 
 def histogram(dem = dem, blocks = blocks, overlayRange = overlayRange):
-   print("HEYYYYYYYYYYY")
-   
-   '''' #clipping dem to block 
+    print("HEYYYY")
+    #clipping dem to block 
     blockDEM = processing.run("gdal:cliprasterbymasklayer", {'INPUT':'C:/Users/KBE/Desktop/pyproj/overlays/overlay(1).tif','MASK':'C:/Users/KBE/Desktop/pyproj/overlays/block.shp','SOURCE_CRS':None,'TARGET_CRS':None,'TARGET_EXTENT':None,'NODATA':None,'ALPHA_BAND':False,'CROP_TO_CUTLINE':True,'KEEP_RESOLUTION':False,'SET_RESOLUTION':False,'X_RESOLUTION':None,'Y_RESOLUTION':None,'MULTITHREADING':False,'OPTIONS':None,'DATA_TYPE':0,'EXTRA':'','OUTPUT':'TEMPORARY_OUTPUT'})
-    #getting raster stats of basic elevation for the block
+    #getting raster stats of b    asic elevation for the block
     zonalStats = processing.run("native:zonalstatisticsfb", {'INPUT':'C:/Users/KBE/Desktop/pyproj/overlays/block.shp','INPUT_RASTER':'C:/Users/KBE/Desktop/pyproj/overlays/flat_raster(1).tif','RASTER_BAND':1,'COLUMN_PREFIX':'_','STATISTICS':[0,1,2],'OUTPUT':'TEMPORARY_OUTPUT'})
     
     
@@ -197,15 +196,21 @@ def histogram(dem = dem, blocks = blocks, overlayRange = overlayRange):
         n = 1
         #adding field to attribute table
         processing.run("native:addfieldtoattributestable", {'INPUT':'memory://MultiPolygon?crs=EPSG:2264&field=id:long(10,0)&field=wl:double(10,3)&field=_count:double(0,0)&field=_sum:double(0,0)&field=_mean:double(0,0)&uid={d255e972-07dd-48d3-ab0a-e863f64dee94}','FIELD_NAME':'wl','FIELD_TYPE':1,'FIELD_LENGTH':10,'FIELD_PRECISION':0,'FIELD_ALIAS':'','FIELD_COMMENT':'','OUTPUT':'TEMPORARY_OUTPUT'})        
-'''
+
     
 #-------------EXECUTIONS------------
 
 #if manual mode is active, the file will execute every function set to "True" in the inputs
+print("FUNCTION TEST")
+
 if manual == True:
     for f in functions.keys():
         if functions[f] == True:
-            f()
+            if f == "flatOverlays":
+                flatOverlays()
+            elif f == "domedOverlays":
+                domedOverlays()
+            elif f == "histogram":
+                histogram()
 
 
- 

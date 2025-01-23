@@ -31,5 +31,3 @@ def histogram(dem, blocks, overlayRange):
         processing.run("native:addfieldtoattributestable", {'INPUT':'memory://MultiPolygon?crs=EPSG:2264&field=id:long(10,0)&field=wl:double(10,3)&field=_count:double(0,0)&field=_sum:double(0,0)&field=_mean:double(0,0)&uid={d255e972-07dd-48d3-ab0a-e863f64dee94}','FIELD_NAME':'wl','FIELD_TYPE':1,'FIELD_LENGTH':10,'FIELD_PRECISION':0,'FIELD_ALIAS':'','FIELD_COMMENT':'','OUTPUT':'TEMPORARY_OUTPUT'})        
 
 #if data was input manually and this tool is being run independently, it will execute itself 
-if manual == "YES":
-    stats(dem, blocks, overlayRange)
